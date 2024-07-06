@@ -23,14 +23,17 @@ const postController = {
   },
   create: (req, res) => {
     try {
-      const { id, title, content } = req.body;
+      const { title, content } = req.body;
 
-      // cek data di body
-      if (!id || !title || !content) throw new Error("Lengkapi form request");
+      // Generate a random ID
+      const id = Math.floor(Math.random() * 1000) + 1;
 
-      // cek dulu id apakah sudah atau ngak
-      const post_exist = posts.find((x) => x.id === id);
-      if (post_exist) throw new Error("ID sudah terdaftar");
+      // Check data in the request body
+      if (!title || !content) throw new Error("Lengkapi form request");
+
+      // Check if the ID already exists
+      const postExist = posts.find((x) => x.id === id);
+      if (postExist) throw new Error("ID sudah terdaftar");
 
       posts.push({
         id,
@@ -48,6 +51,56 @@ const postController = {
       });
     }
   },
+  getOne: (req, res) => {
+    try {
+      const { id } = req.params;
+      const post = posts.find((x) => x.id == id);
+      res.status(200).json({
+        status: "success",
+        data: post,
+      });
+    } catch (error) {
+      res.status(400).json({
+        status: "failed",
+        message: error.message,
+      });
+    }
+  },
+  update: (req, res) => {
+    try {
+      const { id } = req.params;
+      const { title, content } = req.body;
+      const post = posts.find((x) => x.id == id);
+      if (!post) throw new Error("ID tidak ditemukan");
+      post.title = title;
+      post.content = content;
+      res.status(200).json({
+        status: "success",
+        data: post,
+      });
+    } catch (error) {
+      res.status(400).json({
+        status: "failed",
+        message: error.message,
+      });
+    }
+  },
+  delete: (req, res) => {
+    try {
+      const { id } = req.params;
+      const post = posts.find((x) => x.id == id);
+      if (!post) throw new Error("ID tidak ditemukan");
+      posts = posts.filter((x) => x.id != id);
+      res.status(200).json({
+        status: "success",
+        data: post,
+      });
+    } catch (error) {
+      res.status(400).json({
+        status: "failed",
+        message: error.message,
+      });
+    }
+  },
 };
-
 module.exports = postController;
