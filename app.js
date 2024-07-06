@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 app.use(express.json());
-
+app.use(express.static("public")); //to add an CSS file in public folder
 let users = [
   {
     name: "agus",
@@ -34,11 +34,12 @@ app.get("/users", (req, res) => {
 
 app.get("/users/:name", (req, res) => {
   const name = req.params.name;
-  const user = users.find((x) => x.name == name);
-  res.json({
-    status: "OK",
-    data: user,
-  });
+  const user = users.find((u) => u.name === name);
+  if (user) {
+    res.send(user);
+  } else {
+    res.status(404).send("users not found");
+  }
 });
 
 // tambah user
@@ -74,4 +75,4 @@ app.delete("/users/:name", (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log("Server is listening..."));
+app.listen(3000, () => console.log("Server is listening at 3000"));
