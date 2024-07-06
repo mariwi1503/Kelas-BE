@@ -17,6 +17,9 @@ app.delete("/delete-user/:name", userController.delete);
 // post
 app.get("/posts", postController.getAll);
 app.post("/posts", postController.create);
+app.get("/posts/:id", postController.getOne);
+app.put("/posts/:id", postController.update);
+app.delete("/posts/:id", postController.delete);
 
 app.listen(3000, () => console.log("Server is listening..."));
 
