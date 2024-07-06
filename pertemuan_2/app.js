@@ -21,7 +21,7 @@ app.post("/posts", postController.create);
 app.put("/update-post/:id", postController.update);
 app.delete("/delete-post/:id", postController.delete);
 
-app.listen(3001, () => console.log("Server is listening..."));
+app.listen(3001, () => console.log("Server is listening at 3001"));
 
 /**
  * TODO

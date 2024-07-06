@@ -70,20 +70,24 @@ const postController = {
   //delete
   delete: (req, res) => {
     try {
-      const id = req.params.id;
-      const post = posts.filter((x) => x.id != id);
-      if (!post) throw new Error("id tidak ditemukan");
+      const id = parseInt(req.params.id);
+      const index = posts.findIndex(post => post.id === id);
+      if (index === -1) throw new Error("id tidak ditemukan");
+      posts.splice(index, 1);
+  
       res.json({
         status: "success",
-        data: post,
+        message: `Post dengan id ${id} telah dihapus`,
+        data: posts,
       });
     } catch (error) {
-      res.json({
+      res.status(400).json({
         status: "failed",
         message: error.message,
       });
     }
   },
+  
 
   //update
   update: (req, res) => {
