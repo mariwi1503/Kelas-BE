@@ -1,0 +1,6 @@
+Materi:
+coba buat aplikasi sederhana => Mahasiswa
+
+Packages:
+- Morgan => Logging, mencatat ke console semua request masuk
+- sequelize => ORM, menghubungkan ke database

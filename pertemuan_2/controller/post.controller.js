@@ -23,14 +23,17 @@ const postController = {
   },
   create: (req, res) => {
     try {
-      const { id, title, content } = req.body;
+      const { title, content } = req.body;
 
-      // cek data di body
-      if (!id || !title || !content) throw new Error("Lengkapi form request");
+      // Generate a random ID
+      const id = Math.floor(Math.random() * 1000) + 1;
 
-      // cek dulu id apakah sudah atau ngak
-      const post_exist = posts.find((x) => x.id === id);
-      if (post_exist) throw new Error("ID sudah terdaftar");
+      // Check data in the request body
+      if (!title || !content) throw new Error("Lengkapi form request");
+
+      // Check if the ID already exists
+      const postExist = posts.find((x) => x.id === id);
+      if (postExist) throw new Error("ID sudah terdaftar");
 
       posts.push({
         id,
@@ -48,37 +51,26 @@ const postController = {
       });
     }
   },
-
-  // find getOne
   getOne: (req, res) => {
     try {
-      const id = req.params.id;
+      const { id } = req.params;
       const post = posts.find((x) => x.id == id);
-      if (!post) throw new Error("id tidak ditemukan");
-      res.json({
+      res.status(200).json({
         status: "success",
         data: post,
       });
     } catch (error) {
-      res.json({
-        status: "failed",
-        message: error.message,
-      });
-    }
-  },
-
-  //delete
-  delete: (req, res) => {
+  update: (req, res) => {
     try {
-      const id = parseInt(req.params.id);
-      const index = posts.findIndex(post => post.id === id);
-      if (index === -1) throw new Error("id tidak ditemukan");
-      posts.splice(index, 1);
-  
-      res.json({
+      const { id } = req.params;
+      const { title, content } = req.body;
+      const post = posts.find((x) => x.id == id);
+      if (!post) throw new Error("ID tidak ditemukan");
+      post.title = title;
+      post.content = content;
+      res.status(200).json({
         status: "success",
-        message: `Post dengan id ${id} telah dihapus`,
-        data: posts,
+        data: post,
       });
     } catch (error) {
       res.status(400).json({
@@ -87,32 +79,22 @@ const postController = {
       });
     }
   },
-  
-
-  //update
-  update: (req, res) => {
+  delete: (req, res) => {
     try {
-      console.log(req.params.id);
-      const { id, title, content } = req.body;
-      // data id tidak boleh berubah
-      if (id != req.params.id || !id)
-        throw new Error("id tidak boleh berubah atau kosong");
-      posts.push({
-        id,
-        title,
-        content,
-      });
-      res.json({
+      const { id } = req.params;
+      const post = posts.find((x) => x.id == id);
+      if (!post) throw new Error("ID tidak ditemukan");
+      posts = posts.filter((x) => x.id != id);
+      res.status(200).json({
         status: "success",
-        data: posts,
+        data: post,
       });
     } catch (error) {
-      res.json({
+      res.status(400).json({
         status: "failed",
         message: error.message,
       });
     }
   },
 };
-
 module.exports = postController;

@@ -18,8 +18,9 @@ app.delete("/delete-user/:name", userController.delete);
 app.get("/posts", postController.getAll);
 app.get("/posts/:id", postController.getOne);
 app.post("/posts", postController.create);
-app.put("/update-post/:id", postController.update);
-app.delete("/delete-post/:id", postController.delete);
+app.get("/posts/:id", postController.getOne);
+app.put("/posts/:id", postController.update);
+app.delete("/posts/:id", postController.delete);
 
 app.listen(3001, () => console.log("Server is listening at 3001"));
 
