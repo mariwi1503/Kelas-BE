@@ -1,18 +1,13 @@
 const playerModel = require("../model/player.model");
+const response = require("../responese");
 
 module.exports = {
   getAll: async (req, res) => {
     try {
       const data = await playerModel.findAll();
-      res.status(200).json({
-        status: "success",
-        data,
-      });
+      response(200, data, "data ditemukan", res, null, null, data.length);
     } catch (error) {
-      res.status(400).json({
-        status: "failed",
-        message: error.message,
-      });
+      response(400, null, error.message, res, null, null, null);
     }
   },
   getOneById: async (req, res) => {
@@ -23,15 +18,9 @@ module.exports = {
       });
       if (!dataPlayer) throw new Error("data tidak ditemukan");
 
-      res.status(200).json({
-        status: "success",
-        data: dataPlayer,
-      });
+      response(200, dataPlayer, "data ditemukan", res, null, null, null);
     } catch (error) {
-      res.status(400).json({
-        status: "failed",
-        message: error.message,
-      });
+      response(400, null, error.message, res, null, null, null);
     }
   },
   create: async (req, res) => {
@@ -61,15 +50,9 @@ module.exports = {
         number,
       });
 
-      res.status(200).json({
-        status: "success",
-        data: dataPlayer,
-      });
+      response(200, dataPlayer, "data ditemukan", res, null, null, null);
     } catch (error) {
-      res.status(400).json({
-        status: "failed",
-        message: error.message,
-      });
+      response(400, null, error.message, res, null, null, null);
     }
   },
   update: async (req, res) => {
@@ -92,15 +75,9 @@ module.exports = {
       await playerModel.update(updatedFields, { where: { id } });
       const updatedPlayer = await playerModel.findOne({ where: { id } });
 
-      res.status(200).json({
-        status: "success",
-        data: updatedPlayer,
-      });
+      response(200, updatedPlayer, "data ditemukan", res, null, null, null);
     } catch (error) {
-      res.status(400).json({
-        status: "failed",
-        message: error.message,
-      });
+      response(400, null, error.message, res, null, null, null);
     }
   },
 
@@ -112,15 +89,9 @@ module.exports = {
       if (!findPlayer) throw new Error("data not found");
 
       await findPlayer.destroy();
-      res.status(200).json({
-        status: "success",
-        message: "Player deleted successfully",
-      });
+      response(200, null, "data deleted", res, null, null, null);
     } catch (error) {
-      res.status(400).json({
-        status: "failed",
-        message: error.message,
-      });
+      response(400, null, error.message, res, null, null, null);
     }
   },
 };

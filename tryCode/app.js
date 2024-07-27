@@ -5,6 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const playerRoute = require("./router/player.route");
 const authRouter = require("./router/auth.route");
+const jwtRouter = require("./router/jwt.route");
 
 const app = express();
 app.use(cors());
@@ -22,7 +23,8 @@ app.use("/api", playerRoute);
 
 //auth
 app.use("/auth", authRouter);
-app.get('/', authRouter);
+app.get("/", authRouter);
+app.use("/jwt", jwtRouter);
 
 //global
 app.all("*", (req, res) => {
