@@ -14,14 +14,9 @@ const authController = {
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = await User.create({ username, password: hashedPassword });
 
-      // Buat token JWT
-      const token = jwt.sign({ userId: user.id }, secretKey, {
-        expiresIn: "1h",
-      });
-
       res.status(201).json({
         status: "success",
-        data: { user, token },
+        data: { user },
       });
     } catch (error) {
       res.status(400).json({
@@ -57,6 +52,20 @@ const authController = {
       });
     }
   },
+  getAll: async (req, res) => {
+    try {
+      const allMember = await User.findAll();
+      res.status(200).json({
+        status: "success",
+        data: allMember
+      })
+    } catch (error) {
+      res.status(400).json({
+        status: "failed",
+        message: error.message
+    })
+    }
+  }
 };
 
 module.exports = authController;

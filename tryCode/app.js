@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
@@ -9,7 +9,9 @@ const authRouter = require("./router/auth.route");
 const app = express();
 app.use(cors());
 app.use(morgan("dev"));
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("halo brothers");
@@ -20,6 +22,7 @@ app.use("/api", playerRoute);
 
 //auth
 app.use("/auth", authRouter);
+app.get('/', authRouter);
 
 //global
 app.all("*", (req, res) => {
