@@ -22,7 +22,7 @@ const authController = {
       res.status(400).json({
         status: "error",
         message: error.message,
-        details: error.errors ? error.errors.map((e) => e.message) : null, // Detail error
+        details: error.errors ? error.errors.map((e) => e.message) : null,
       });
     }
   },
@@ -30,18 +30,32 @@ const authController = {
   login: async (req, res) => {
     try {
       const { username, password } = req.body;
+
+      // Validasi username
       const user = await User.findOne({ where: { username } });
       if (!user) {
         throw new Error("User not found");
       }
+
+      // Validasi password
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         throw new Error("Invalid password");
       }
+
+      // Buat token
       const token = jwt.sign({ userId: user.id }, secretKey, {
         expiresIn: "1h",
       });
-      res.status(200).json({
+
+      // Kirim token ke cookies
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: false, // Ganti menjadi true jika menggunakan HTTPS
+        sameSite: "strict",
+      });
+
+      return res.status(200).json({
         status: "success",
         data: { token },
       });
@@ -52,20 +66,49 @@ const authController = {
       });
     }
   },
+
+  getUser: async (req, res) => {
+    try {
+      const token = req.cookies.token;
+
+      if (!token) {
+        throw new Error("No token provided");
+      }
+
+      jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+          throw new Error("Failed to authenticate token");
+        }
+
+        return res.status(200).json({ username: decoded.username });
+      });
+    } catch (error) {
+      res.status(400).json({
+        status: "failed",
+        message: error.message,
+      });
+    }
+  },
+
+  logout: async (req, res) => {
+    res.clearCookie("token");
+    return res.status(200).json({ message: "Logout successful" });
+  },
+
   getAll: async (req, res) => {
     try {
       const allMember = await User.findAll();
       res.status(200).json({
         status: "success",
-        data: allMember
-      })
+        data: allMember,
+      });
     } catch (error) {
       res.status(400).json({
         status: "failed",
-        message: error.message
-    })
+        message: error.message,
+      });
     }
-  }
+  },
 };
 
 module.exports = authController;
