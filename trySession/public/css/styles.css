@@ -1,0 +1,56 @@
+/* Mengatur tampilan body */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Arial", sans-serif;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Mengatur container utama */
+.container {
+  text-align: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Mengatur tampilan kotak selamat datang */
+.welcome-box {
+  color: #fff;
+}
+
+/* Mengatur judul */
+.welcome-box h1 {
+  font-size: 3em;
+  margin: 0 0 20px;
+}
+
+/* Mengatur paragraf */
+.welcome-box p {
+  font-size: 1.2em;
+  margin: 0 0 20px;
+}
+
+/* Mengatur tombol */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #fff;
+  background: #ff5a5f;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+/* Efek hover pada tombol */
+.btn:hover {
+  background: #ff2a2f;
+}
